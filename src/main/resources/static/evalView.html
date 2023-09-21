@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비시나리오 평가 모니터링</title>
+    <style>
+      .map {
+        height: 850px;
+        width: 80%;
+        border: 1px solid grey;
+      }
+      .alert {
+        background-color: black;color: yellow;font-weight: bold;
+      }
+      .vibration {
+        animation: shake 0.1s;
+        animation-iteration-count: 1;
+      }
+
+      @keyframes shake {
+          0% { transform: translate(1px, 1px) rotate(0deg); }
+          10% { transform: translate(-1px, -2px) rotate(-1deg); }
+          20% { transform: translate(-3px, 0px) rotate(1deg); }
+          30% { transform: translate(3px, 2px) rotate(0deg); }
+          40% { transform: translate(1px, -1px) rotate(1deg); }
+          50% { transform: translate(-1px, 2px) rotate(-1deg); }
+          60% { transform: translate(-3px, 1px) rotate(0deg); }
+          70% { transform: translate(3px, 1px) rotate(-1deg); }
+          80% { transform: translate(-1px, -1px) rotate(1deg); }
+          90% { transform: translate(1px, 2px) rotate(0deg); }
+          100% { transform: translate(1px, -2px) rotate(-1deg); }
+      }
+    </style>
+    <link rel="stylesheet" href="/webjars/openlayers/6.1.1/ol.css" type="text/css">
+    <!--link rel='stylesheet' href='/stylesheets/style.css' /-->
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <!--script-- src="/webjars/stomp-websocket/2.3.4/stomp.min.js"></script-->
+    <script src="/js/stomp.min.js"></script>
+
+    <script src="/webjars/openlayers/6.1.1/ol.js"></script>
+    <script src="/webjars/echarts/5.0.2/echarts.min.js"></script>
+    <script src="/webjars/momentjs/2.29.1/moment.js"></script>
+
+    <script src="/webjars/vertx__eventbus-bridge-client.js/1.0.0-2/vertx-eventbus.js"></script>
+
+    <script src="/js/evalNonScenario.js"></script>
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div class="form-group">
+    <label for="connect">WebSocket connection:</label>
+    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+    </button>
+</div><br>
+<!--input type="text" id="longitude" value="126.7737476" size="15" placeholder="126.7737476"> <input type="text" id="latitude" value="37.2425725" size="15" placeholder="37.2425725"--><!--button id="showPointBtn">Point Show</button-->
+<a href="/vehicleTest.html" class="btn button" target="_blank">차량시험 정보</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button id="violationViweBtn" class="btn btn-default" type="submit">위반건 확인</button>&nbsp;<label id="violationLabel"></label>
+<br>
+
+<span id="labelKeepStopLine" class="alert">정지선 위반</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="labelKeepTrafficLight" class="alert">신호 위반</span>
+&nbsp;&nbsp;&nbsp;&nbsp;<span id="labelKeepRuleSpeed" class="alert">규정속도 위반</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="labelKeepVehicleLine" class="alert">차로 위반</span>
+<div style="position:absolute;">
+    <div id="chartSpeed" style="width:500px; height:200px;top:50px;left:2px;" ></div>
+    <div id="chartSpeedGauge" style="width:500px; height:400px;top:300px;left:-10px;" ></div>
+    <div id="chartViolation" style="width:500px; height:200px;top:700px;left:2px;" ></div>
+</div>
+
+<div style="display:flex">
+    <div id="map" class="map" style="border-width: 1px;">
+    </div>
+    <div>
+        <h3 id="direction"></h3>
+        <br><br>
+        신호등 ID: <label id="infraId" style="font-weight:bolder;"></label><br><br>
+        <table style="width: 200px;">
+            <thead>
+            <tr>
+                <th>좌회전</th><th>직진</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td align="center" style="background-color: black;">
+
+
+                    <span id="leftLightRed" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: red;"></span>
+                    <!--span id="leftLightGreen" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: green;"></span-->
+
+                    <img id="leftLightGreen" src = "/image/Small_arrow_pointing_left.svg" width="50" height="50">
+
+                    <span id="leftLightYellow" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: orange;"></span>
+
+                </td>
+                <td align="center" style="background-color: black;">
+
+                    <span id="strateLightRed" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: red;"></span>
+                    <span id="strateLightGreen" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: green"></span>
+                    <span id="strateLightYellow" style="height:50px;width: 50px;border-radius: 50%;display: inline-block;background-color: orange;"></span>
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <br>
+    </div>
+</div>
+
+</body>
+</html>

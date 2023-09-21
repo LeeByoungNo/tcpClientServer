@@ -1,0 +1,29 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: white;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+p {
+	color: orange;
+}
+
+/* table css define  */
+table {
+	width: 100%;
+	border: 1px solid #444444;
+}
+th, td {
+    border: 1px solid #444444;
+}
+
+
+div {
+	background-color: #eeeeee;
+	width: 50%;
+}
